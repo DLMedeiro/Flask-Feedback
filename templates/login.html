@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+
+{%block title%}Login Page{%endblock%}
+
+{%block content%}
+
+<div class="container">
+    <h2>Log In</h2>
+
+    <form method = "POST" id="loginForm">
+        {{form.hidden_tag()}}
+        {% for field in form if field.widget.input_type !='hidden'%}
+        
+        <p>
+            {{field.label}}
+            {{field(class = "form-control")}}
+            
+            {%for error in field.errors%}
+            {{error}}
+            {%endfor%}
+        </p> 
+        
+        {%endfor%}
+        
+        <button id = "loginUser" class="btn btn-primary btn-lg">Log In</button>
+        
+    </form>
+    <form action="/register">
+        <button id = "newUser" class="btn btn-primary btn-lg">Create a new account</button>
+    </form>
+    
+</div>
+
+{%endblock%}
+
+{%block footer%} <a href="/">Home</a> {%endblock%}

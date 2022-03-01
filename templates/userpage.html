@@ -1,0 +1,51 @@
+{%extends 'base.html'%}
+
+{%block title%}{{active_user.username}}'s Page{%endblock%}
+
+{%block content%}
+
+{%if 'user_username' not in session%}
+    <div class="container">
+        <h1>You must be logged in to view this page</h1>
+    </div>
+{% endif %}
+
+
+{%if 'user_username' in session%}
+<div class="container">
+    <h2>Secrets!</h2>
+</div>
+
+<p><b>User Name: </b>{{active_user.username}}</p>
+<p><b>Email: </b> {{active_user.email}}</p>
+<p><b>User First Name:</b> {{active_user.first_name}}</p>
+<p><b>User Last Name: </b>{{active_user.last_name}}</p>
+<form action="/user/{{active_user.username}}/delete">
+    <button class="btn_add">Delete Account</button>
+</form>
+
+<h2>Feedback</h2>
+    <div>
+        {%for items in feedback%}
+            {% if items.username_id == active_user.username%}
+                <h3>{{items.title}}</h3>
+                <p>{{items.content}}</p>
+                <form action="/feedback/{{items.id}}/edit">
+                    <button class="btn_add">Edit Feedback</button>
+                </form>
+                <form action="/feedback/{{items.id}}/delete">
+                    <button class="btn_add">Delete Feedback</button>
+                </form>
+            {%endif%}
+        {%endfor%}
+    </div>
+
+<form action="/user/{{active_user.username}}/feedback/add">
+    <button class="btn_add">Create New Feedback</button>
+</form>
+
+{% endif %}
+
+{%endblock%}
+
+{%block footer%} <a href="/">Home</a> {%endblock%}

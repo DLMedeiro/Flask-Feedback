@@ -1,0 +1,28 @@
+{%extends 'base.html'%}
+
+{%block title%}Create Feedback Page{%endblock%}
+
+{%block content%}
+
+<div class="container">
+    <h2>Edit Feedback</h2>
+
+    <div class="outer_container">
+        <form method="POST" class="edit_form">
+
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" value="{{feedback_item.title}}" style = "width: 400px;">
+
+            <label for="content">Post Content</label>
+            <input type="text" name="content" id="content" style = "height:200px;width: 400px;" value="{{feedback_item.content}}">
+
+            <button class = "btn_add">Save</button>
+
+        </form>
+    </div>
+    
+</div>
+
+{%endblock%}
+
+{%block footer%} <a href="/">Home</a> {%endblock%}
