@@ -12,17 +12,23 @@
     <nav class="navbar navbar-light bg-primary justify-content-between ">
         <div class="container">
         <a href="/" class="navbar-brand text-light">Fask Feedback Project</a>
-        <ul class="nav navbar-nav flex-row float-right">
+        <ul class="nav justify-content-end">
             {% if session['user_username'] %}
             <li class="nav-item">
-            <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
+                <a class="nav-link pr-3 text-light" href="/user/{{session['user_username']}}">{{session['user_username']}}'s Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-light" href="/feedback">Feedback</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link pr-3 text-light" href="/logout">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-            <a class="nav-link pr-3 text-light" href="/login">Login</a>
+                <a class="nav-link pr-3 text-light" href="/login">Login</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link text-light" href="/register">Sign up</a>
+                <a class="nav-link text-light" href="/register">Sign up</a>
             </li>
             {% endif %}
         </ul>

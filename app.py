@@ -44,40 +44,17 @@ def register():
             db.session.commit()
 
             session['user_username'] = user.username
-            return redirect("/user/" + str(session['user_username']))
+            return redirect("/feedback")
         except:
             flash(f'The username "{username}" is already in use, please choose another username')
             return render_template("register.html", form = form)
     else:
         return render_template("register.html", form = form)
 
-@app.route('/user/<active>')
-def secret(active):
-    # Will prevent from going straight to user/username if not logged in.  Will not prevent user/*anyusername if already logged in. Using "active not in session" will eliminate the issue once on the userpage, but then you can't get back to the current user's page
-    # if active != 'user_username':
-        # return render_template('noentry.html')
-    if 'user_username' not in session:
-        return redirect('/login')
-    else:
-        active_user =  User_Info.query.get_or_404(active)
-        feedback = Feedback.query.all()
-        return render_template('userpage.html', active_user= active_user, feedback = feedback)
-@app.route('/user/<active>/delete')
-def delete_user(active):
-    # Will prevent from going straight to user/username if not logged in.  Will not prevent user/*anyusername if already logged in
-    if "user_username" not in session:
-        return redirect('/login')
-    else:
-        active_user =  User_Info.query.get_or_404(active)
-        feedback = Feedback.query.filter_by(username_id = active).delete()
-
-        # db.session.delete(feedback)
-        db.session.commit()
-
-        db.session.delete(active_user)
-        db.session.commit()
-
-        return redirect('/login')
+@app.route('/feedback')
+def feedback():
+    feedback = Feedback.query.all()
+    return render_template('feedback.html', feedback = feedback)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -89,11 +66,42 @@ def login():
         user = User_Info.authenticate(username = username, password = password)
         if user:
             session['user_username'] = user.username
-            return redirect("/user/" + session['user_username'])
+            return redirect('/feedback')
+            # return redirect("/user/" + session['user_username'])
         else:
             return render_template('login.html', form = form)
 
     return render_template('login.html', form = form)
+
+@app.route('/user/<active>')
+def secret(active):
+    # Will prevent from going straight to user/username if not logged in.  Will not prevent user/*anyusername if already logged in. Using "active not in session" will eliminate the issue once on the userpage, but then you can't get back to the current user's page
+    # if active != 'user_username':
+        # return render_template('noentry.html')
+    if active not in session:
+        return redirect('/login')
+    else:
+        active_user =  User_Info.query.get_or_404(active)
+        feedback = Feedback.query.all()
+        return render_template('userpage.html', active_user= active_user, feedback = feedback)
+
+@app.route('/user/<active>/delete')
+def delete_user(active):
+    # Will prevent from going straight to user/username if not logged in.  Will not prevent user/*anyusername if already logged in
+    if "user_username" not in session:
+        return redirect('/login')
+    else:
+        session.pop('user_username')
+        active_user =  User_Info.query.get_or_404(active)
+        feedback = Feedback.query.filter_by(username_id = active).delete()
+
+        # db.session.delete(feedback)
+        db.session.commit()
+
+        db.session.delete(active_user)
+        db.session.commit()
+
+        return redirect('/login')
 
 @app.route('/logout')
 def logout():
@@ -113,7 +121,7 @@ def addFeedback(active):
         content = form.content.data
         username_id = active_user.username
 
-        feedback = Feedback(title = title, content = content, username_id = username_id)
+        feedback = Feedback(title = title, content = content, username_id = session['user_username'])
         db.session.add(feedback)
         db.session.commit()
 

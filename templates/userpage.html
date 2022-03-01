@@ -4,7 +4,11 @@
 
 {%block content%}
 
-{%if active_user.username not in session%}
+<h1>
+    {{user_username}}
+</h1>
+
+{%if 'user_username' not in session%}
     <div class="container">
         <h1>You must be logged in to view this page</h1>
     </div>
@@ -13,7 +17,7 @@
 
 {%if 'user_username' in session%}
 <div class="container">
-    <h2>Secrets!</h2>
+    <h2>{{active_user.username}}'s Profile</h2>
 </div>
 
 <p><b>User Name: </b>{{active_user.username}}</p>
@@ -48,4 +52,3 @@
 
 {%endblock%}
 
-{%block footer%} <a href="/">Home</a> {%endblock%}
