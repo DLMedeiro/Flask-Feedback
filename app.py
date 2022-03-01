@@ -44,7 +44,7 @@ def register():
             db.session.commit()
 
             session['user_username'] = user.username
-            return redirect("/user/" + str(username))
+            return redirect("/user/" + str(session['user_username']))
         except:
             flash(f'The username "{username}" is already in use, please choose another username')
             return render_template("register.html", form = form)
@@ -54,6 +54,8 @@ def register():
 @app.route('/user/<active>')
 def secret(active):
     # Will prevent from going straight to user/username if not logged in.  Will not prevent user/*anyusername if already logged in. Using "active not in session" will eliminate the issue once on the userpage, but then you can't get back to the current user's page
+    # if active != 'user_username':
+        # return render_template('noentry.html')
     if 'user_username' not in session:
         return redirect('/login')
     else:
@@ -87,7 +89,7 @@ def login():
         user = User_Info.authenticate(username = username, password = password)
         if user:
             session['user_username'] = user.username
-            return redirect("/user/" + str(username))
+            return redirect("/user/" + session['user_username'])
         else:
             return render_template('login.html', form = form)
 

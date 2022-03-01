@@ -4,7 +4,7 @@
 
 {%block content%}
 
-{%if 'user_username' not in session%}
+{%if active_user.username not in session%}
     <div class="container">
         <h1>You must be logged in to view this page</h1>
     </div>
