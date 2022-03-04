@@ -75,15 +75,19 @@ def login():
 
 @app.route('/user/<active>')
 def secret(active):
-    # if active not in session:
-    #     return redirect('/login')
-    
-    if active != 'user_username':
+
+    if 'user_username' not in session:
         return redirect('/login')
-    else:
-        active_user =  User_Info.query.get_or_404(active)
+
+    active_user =  User_Info.query.get_or_404(active)
+
+    if active_user.username == session['user_username']:
         feedback = Feedback.query.all()
         return render_template('userpage.html', active_user= active_user, feedback = feedback)
+    else:
+        flash("You must be logged in to view this page")
+        return redirect('/login')
+
 
 @app.route('/user/<active>/delete')
 def delete_user(active):
@@ -112,22 +116,30 @@ def logout():
 @app.route('/user/<active>/feedback/add', methods = ['GET', 'POST'])
 def addFeedback(active):
     """Active = username"""
-    if "user_username" not in session:
+
+    if 'user_username' not in session:
         return redirect('/login')
+
     active_user =  User_Info.query.get_or_404(active)
     form = CreateFeedback()
-    if form.validate_on_submit():
-        title = form.title.data
-        content = form.content.data
-        username_id = active_user.username
 
-        feedback = Feedback(title = title, content = content, username_id = session['user_username'])
-        db.session.add(feedback)
-        db.session.commit()
+    if active_user.username == session['user_username']:
+        if form.validate_on_submit():
+            title = form.title.data
+            content = form.content.data
+            username_id = active_user.username
 
-        return redirect("/user/" + str(username_id))
+            feedback = Feedback(title = title, content = content, username_id = session['user_username'])
+            db.session.add(feedback)
+            db.session.commit()
+
+            return redirect("/user/" + str(username_id))
+        else:
+            return render_template('createFeedback.html', form = form)
     else:
-        return render_template('createFeedback.html', form = form)
+        flash("You must be logged in to view this page")
+        return redirect('/login')
+
 
 @app.route('/feedback/<feedback_id>/edit')
 def editFeedback_page(feedback_id):
@@ -142,7 +154,6 @@ def editFeedback(feedback_id):
     if "user_username" not in session:
         return redirect('/login')
 
-    feedback_item =  Feedback.query.get_or_404(feedback_id)
 
     title = request.form['title']
     content = request.form['content']

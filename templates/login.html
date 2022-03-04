@@ -4,9 +4,17 @@
 
 {%block content%}
 
+
 <div class="container">
     <h2>Log In</h2>
-
+    {%with messages = get_flashed_messages (with_categories = true)%}
+    {%if messages%}
+        {%for category, msg in messages%}
+            <p class ={{category}}>{{msg}}</p>
+        {%endfor%}
+    {%endif%}
+    {%endwith%}
+    
     <form method = "POST" id="loginForm">
         {{form.hidden_tag()}}
         {% for field in form if field.widget.input_type !='hidden'%}
