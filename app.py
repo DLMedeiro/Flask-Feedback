@@ -75,10 +75,10 @@ def login():
 
 @app.route('/user/<active>')
 def secret(active):
-    # Will prevent from going straight to user/username if not logged in.  Will not prevent user/*anyusername if already logged in. Using "active not in session" will eliminate the issue once on the userpage, but then you can't get back to the current user's page
-    # if active != 'user_username':
-        # return render_template('noentry.html')
-    if active not in session:
+    # if active not in session:
+    #     return redirect('/login')
+    
+    if active != 'user_username':
         return redirect('/login')
     else:
         active_user =  User_Info.query.get_or_404(active)
