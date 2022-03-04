@@ -7,6 +7,14 @@
 <div class="container">
     <h2>Create New Feedback</h2>
 
+    {%if 'user_username' not in session%}
+    <div class="container">
+        <h1>You must be logged in to view this page</h1>
+    </div>
+    {% endif %}
+
+    {%if 'user_username' in session%}
+
     <form method = "POST" id="newUserForm">
         {{form.hidden_tag()}}
         {% for field in form if field.widget.input_type !='hidden'%}
@@ -27,7 +35,6 @@
     </form>
     
 </div>
+{% endif %}
 
 {%endblock%}
-
-{%block footer%} <a href="/">Home</a> {%endblock%}
