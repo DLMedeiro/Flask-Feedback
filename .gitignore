@@ -1,6 +1,2 @@
 venv/
-<<<<<<< HEAD
 __pycache__/
-=======
-__pycache__/
->>>>>>> authenticate
