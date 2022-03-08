@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from models import connect_db, db, User_Info, Feedback
 from forms import CreateUserForm, LoginForm, CreateFeedback
+import os
 
 
 app = Flask(__name__)
@@ -16,7 +17,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 db.create_all()
 
-app.config['SECRET_KEY'] = "FLASKFEEDBACK"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY','secret' )
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
