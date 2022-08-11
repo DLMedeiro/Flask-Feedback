@@ -1,14 +1,7 @@
-# FlaskFeedback
-Springboard 24.5 Hashing and Log In
+# Hashing and Login Practice
 
-Installation / Set up:
+This application lets users sign up and log in to their own accounts. Once logged in, users can add feedback, edit their feedback, delete their feedback, and see a list of their feedback. Logged in users can navigate through protected routes, while non logged in users are directed to the sign up form.
 
-  This repository uses PostgreSQL.
-  Prior to running the application run the following lines through the command line:
-  ```
-    "sudo apt.get install postgresql" - To install PostreSQL
-    "sudo service postgresql start" - To start the PostgreSql server
-  ```
-  
-  
-  
+## Installation / Set up:
+
+This repository requires the installation of PostgreSQL.
